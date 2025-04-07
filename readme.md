@@ -1,4 +1,4 @@
-# LoggingMiddleware
+# OSLogLoggingMiddleware
 
 [![Swift Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Flaconicman%2FOSLogLoggingMiddleware%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/laconicman/OSLogLoggingMiddleware)
 [![Platform Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Flaconicman%2FOSLogLoggingMiddleware%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/laconicman/OSLogLoggingMiddleware)
