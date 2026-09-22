@@ -6,11 +6,25 @@ import OSLog
 
 public struct OSLogLoggingMiddleware {
     private let logger: Logger
+    private let level: OSLogType
+    private let publicBodies: Bool
     public let bodyLoggingPolicy: BodyLoggingPolicy
 
-    public init(logger: Logger = defaultLogger, bodyLoggingConfiguration: BodyLoggingPolicy = .never) {
+    /// - Parameters:
+    ///   - level: Request/response lines log at this level. `.debug` is not persisted on
+    ///     device; use `.default` or higher for field capture.
+    ///   - publicBodies: When true, bodies log with `.public` privacy — readable in a
+    ///     `log collect` export; when false they log `.auto` and appear as `<private>`.
+    public init(
+        logger: Logger = defaultLogger,
+        bodyLoggingConfiguration: BodyLoggingPolicy = .never,
+        level: OSLogType = .debug,
+        publicBodies: Bool = false
+    ) {
         self.logger = logger
         self.bodyLoggingPolicy = bodyLoggingConfiguration
+        self.level = level
+        self.publicBodies = publicBodies
     }
     
     public static let defaultLogger: Logger = {
@@ -65,15 +79,31 @@ extension OSLogLoggingMiddleware: ServerMiddleware {
 
 extension OSLogLoggingMiddleware {
     func log(_ request: HTTPRequest, _ requestBody: BodyLoggingPolicy.BodyLog) {
-        logger.debug(
-            "Request: \(request.method, privacy: .public) \(request.path ?? "<nil>", privacy: .public) body: \(requestBody, privacy: .auto)"
-        )
+        if publicBodies {
+            logger.log(
+                level: level,
+                "Request: \(request.method, privacy: .public) \(request.path ?? "<nil>", privacy: .public) body: \(requestBody, privacy: .public)"
+            )
+        } else {
+            logger.log(
+                level: level,
+                "Request: \(request.method, privacy: .public) \(request.path ?? "<nil>", privacy: .public) body: \(requestBody, privacy: .auto)"
+            )
+        }
     }
 
     func log(_ request: HTTPRequest, _ response: HTTPResponse, _ responseBody: BodyLoggingPolicy.BodyLog) {
-        logger.debug(
-            "Response: \(request.method, privacy: .public) \(request.path ?? "<nil>", privacy: .public) \(response.status, privacy: .public) body: \(responseBody, privacy: .auto)"
-        )
+        if publicBodies {
+            logger.log(
+                level: level,
+                "Response: \(request.method, privacy: .public) \(request.path ?? "<nil>", privacy: .public) \(response.status, privacy: .public) body: \(responseBody, privacy: .public)"
+            )
+        } else {
+            logger.log(
+                level: level,
+                "Response: \(request.method, privacy: .public) \(request.path ?? "<nil>", privacy: .public) \(response.status, privacy: .public) body: \(responseBody, privacy: .auto)"
+            )
+        }
     }
 
     func log(_ request: HTTPRequest, failedWith error: any Error) {
