@@ -51,17 +51,16 @@ AsyncHTTPClient, Hummingbird…), which also makes it usable server-side.
 ### Basic Setup
 
 ```swift
-import OSLogLoggingMiddleware
 import OpenAPIURLSession
+import OSLogLoggingMiddleware
 
-guard let serverURL = URL(string: "https://api.example.com") else {
-    fatalError("Configure a valid server URL")
+func makeClient(serverURL: URL) -> Client {
+    Client(
+        serverURL: serverURL,
+        transport: URLSessionTransport(),
+        middlewares: [OSLogLoggingMiddleware()]
+    )
 }
-let client = Client(
-    serverURL: serverURL,
-    transport: URLSessionTransport(),
-    middlewares: [OSLogLoggingMiddleware()]
-)
 ```
 
 The design decisions behind this package — transport-free dependency set, privacy

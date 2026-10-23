@@ -20,14 +20,13 @@ The package is deliberately transport-free: it depends on `OpenAPIRuntime` and
 import OpenAPIURLSession
 import OSLogLoggingMiddleware
 
-guard let serverURL = URL(string: "https://api.example.com") else {
-    fatalError("Configure a valid server URL")
+func makeClient(serverURL: URL) -> Client {
+    Client(
+        serverURL: serverURL,
+        transport: URLSessionTransport(),
+        middlewares: [OSLogLoggingMiddleware()]
+    )
 }
-let client = Client(
-    serverURL: serverURL,
-    transport: URLSessionTransport(),
-    middlewares: [OSLogLoggingMiddleware()]
-)
 ```
 
 ## Topics
