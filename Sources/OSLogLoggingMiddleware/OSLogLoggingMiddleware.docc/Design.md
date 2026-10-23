@@ -20,8 +20,12 @@ the runtime. Nothing in the module imports `OpenAPIURLSession`; the runtime only
 transitively through the transport. That forced a client transport on every consumer —
 including server-side ones — and hid the undeclared `import OpenAPIRuntime`: it links
 statically, but fails when Xcode builds the product as a dynamic package framework.
-`swift build --explicit-target-dependency-import-check error` is the standing gate
-against a target importing a module it does not declare, and CI runs it.
+No in-repo build gate catches this class of defect:
+`swift build --explicit-target-dependency-import-check error` only flags imports
+outside the target's *recursive* dependency closure, so it passed the 1.1.0 manifest
+unchanged (verified 2026-10-23, Swift 6.2 toolchain). The regression gate is therefore
+a consumer that builds the product as a dynamic package framework — `Salon1cApps` CI,
+once its SA-8 workarounds are gone — plus review. Registered as <doc:TechDebt> TD-3.
 
 ## Darwin-only, compiling to nothing elsewhere
 

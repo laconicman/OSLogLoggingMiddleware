@@ -23,10 +23,8 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      # Gate against a target importing a module it does not declare — the
-      # regression this branch fixed (OpenAPIRuntime arrived transitively).
-      - name: Build with explicit import check
-        run: swift build --explicit-target-dependency-import-check error
+      - name: Build
+        run: swift build
 
       - name: Test
         run: swift test

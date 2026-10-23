@@ -31,6 +31,21 @@ mangles the line format, would ship unnoticed.
 injection point today), or a test that reads `OSLogStore` if that API proves stable
 enough to test against.
 
+## TD-3 — No in-repo gate against an undeclared import
+
+The 1.1.0 defect — `import OpenAPIRuntime` with only `OpenAPIURLSession` declared —
+passes `swift build`, `swift test` and
+`swift build --explicit-target-dependency-import-check error` (the check accepts
+transitively available modules). Only a consumer linking the product as a dynamic
+framework fails.
+
+**Cost:** the same manifest mistake can return unnoticed; CI here is green either way.
+
+**Discharge:** a CI step that builds a fixture consumer as a dynamic package framework
+(an `xcodebuild` of a two-target sample), or a SwiftPM/compiler check that covers
+transitive imports once one exists. Until then `Salon1cApps` CI is the gate, one
+repository removed.
+
 ## See Also
 
 - <doc:Design>

@@ -24,7 +24,12 @@ Render: `swift package generate-documentation --target OSLogLoggingMiddleware`
    would force it on server-side consumers. The 1.0–1.1 manifest hid an undeclared
    `import OpenAPIRuntime` behind `swift-openapi-urlsession`'s transitive copy — it
    linked statically and failed under Xcode's dynamic package-framework build.
-   `swift build --explicit-target-dependency-import-check error` is the gate; CI runs it.
+   There is no in-repo compiler gate: SwiftPM's
+   `--explicit-target-dependency-import-check` accepts any module in the target's
+   *recursive* dependency closure, so it passed the 1.1.0 manifest unchanged
+   (verified 2026-10-23). The gate is a consumer that builds the product as a
+   dynamic package framework — `Salon1cApps` CI does — plus review
+   (`REVIEW.md`); see TD-3.
 2. **Platform floor is macOS 11 / iOS 14 / tvOS 14 / watchOS 7 / visionOS 1** —
    `os.Logger`'s availability (D4). No `@available` annotation may raise it without a
    Design entry.

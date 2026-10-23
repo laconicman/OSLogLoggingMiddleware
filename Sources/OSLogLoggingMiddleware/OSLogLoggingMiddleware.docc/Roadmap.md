@@ -19,6 +19,7 @@ Planned work, in priority order.
 
 - **TD-1** — default `Logger` subsystem follows the consumer's bundle identifier.
 - **TD-2** — a sink seam behind `Logger` so the emitted line is testable.
+- **TD-3** — an in-repo dynamic-framework consumer build in CI.
 
 ## See Also
 
