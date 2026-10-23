@@ -11,6 +11,10 @@ public struct OSLogLoggingMiddleware {
     public let bodyLoggingPolicy: BodyLoggingPolicy
 
     /// - Parameters:
+    ///   - logger: The `Logger` lines are written to. Defaults to ``defaultLogger`` —
+    ///     pass your own subsystem so `log stream` predicates can isolate your app.
+    ///   - bodyLoggingConfiguration: Whether request/response bodies are logged at all.
+    ///     Defaults to ``BodyLoggingPolicy/never``.
     ///   - level: Request/response lines log at this level. `.debug` is not persisted on
     ///     device; use `.default` or higher for field capture.
     ///   - publicBodies: When true, bodies log with `.public` privacy — readable in a

@@ -22,7 +22,7 @@ Add the following to your `Package.swift` file:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/laconicman/OSLogLoggingMiddleware.git", from: "1.0.0")
+    .package(url: "https://github.com/laconicman/OSLogLoggingMiddleware.git", from: "1.1.1")
 ]
 ```
 
@@ -39,21 +39,35 @@ targets: [
 ]
 ```
 
+## Requirements
+
+Apple platforms only (macOS 11+, iOS 14+, tvOS 14+, watchOS 7+, visionOS 1+) — the
+package is OSLog-backed, and compiles to an empty module elsewhere. It depends on
+`OpenAPIRuntime` and `HTTPTypes` only: **bring your own transport** (URLSession,
+AsyncHTTPClient, Hummingbird…), which also makes it usable server-side.
+
 ## Usage
 
 ### Basic Setup
 
 ```swift
 import OSLogLoggingMiddleware
-import OpenAPIRuntime
+import OpenAPIURLSession
 
+guard let serverURL = URL(string: "https://api.example.com") else {
+    fatalError("Configure a valid server URL")
+}
 let client = Client(
-    serverURL: URL(string: "https://api.example.com")!,
-    middleware: [
-        OSLogLoggingMiddleware()
-    ]
+    serverURL: serverURL,
+    transport: URLSessionTransport(),
+    middlewares: [OSLogLoggingMiddleware()]
 )
 ```
+
+The design decisions behind this package — transport-free dependency set, privacy
+defaults, platform floor — are documented and authoritative in the rendered
+[Design](https://swiftpackageindex.com/laconicman/OSLogLoggingMiddleware/documentation/oslogloggingmiddleware/design)
+article (`Sources/OSLogLoggingMiddleware/OSLogLoggingMiddleware.docc/Design.md`).
 
 ## Contributing
 
