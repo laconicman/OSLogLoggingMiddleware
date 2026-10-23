@@ -13,8 +13,13 @@ let package = Package(
             targets: ["OSLogLoggingMiddleware"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-openapi-urlsession", from: "1.0.0"),
+        // The middleware protocols and HTTPBody — the only OpenAPI module this package imports.
+        // Transports (URLSession, AsyncHTTPClient, Hummingbird…) are the consumer's choice.
+        .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.0.0"),
         .package(url: "https://github.com/apple/swift-http-types", from: "1.0.2"),
+        // Command plugin for `swift package generate-documentation`; deliberately not in any
+        // target's `plugins:` (same shape as the Salon1c package).
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.4.3"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -22,7 +27,7 @@ let package = Package(
         .target(
             name: "OSLogLoggingMiddleware",
             dependencies: [
-                .product(name: "OpenAPIURLSession", package: "swift-openapi-urlsession"),
+                .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime"),
                 .product(name: "HTTPTypes", package: "swift-http-types")
             ]),
         .testTarget(
